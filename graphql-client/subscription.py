@@ -1,7 +1,9 @@
-from .utils import _get_updated_headers
 import json
 import uuid
+
 import websockets
+
+from .utils import _get_updated_headers
 
 GRAPHQL_PROTOCOL = "graphql-ws"
 
@@ -16,10 +18,10 @@ class Subscription:
         self.is_running = False
 
     async def _con_init(self):
-        self._conn = await websockets.connect(self.endpoint, subprotocols=[GRAPHQL_PROTOCOL])
-        payload = {
-            'type': 'connection_init',
-        }
+        self._conn = await websockets.connect(
+            self.endpoint, subprotocols=[GRAPHQL_PROTOCOL]
+        )
+        payload = {"type": "connection_init"}
         await self._conn.send(json.dumps(payload))
         await self._conn.recv()
 
@@ -37,18 +39,21 @@ class Subscription:
 
             yield resp.get("payload", {})
 
-
     async def start(self):
         await self._con_init()
-        payload = {"query": self.query, "variables": self.variables, "headers": self.headers}
-        message = {'id': self._id, 'type': 'start', 'payload': payload}
+        payload = {
+            "query": self.query,
+            "variables": self.variables,
+            "headers": self.headers,
+        }
+        message = {"id": self._id, "type": "start", "payload": payload}
         await self._conn.send(json.dumps(message))
         res = await self._conn.recv()
         print("after start %s" % res)
         self.is_running = True
 
     async def stop(self):
-        payload = {'id': self._id, 'type': 'stop'}
+        payload = {"id": self._id, "type": "stop"}
         self.is_running = False
         await self._conn.send(json.dumps(payload))
         return self._conn.recv()

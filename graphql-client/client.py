@@ -1,8 +1,9 @@
 import json
+
 import requests
 
-from .utils import _get_updated_headers
 from .subscription import Subscription
+from .utils import _get_updated_headers
 
 
 class GraphQLClient:
