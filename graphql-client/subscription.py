@@ -35,7 +35,7 @@ class Subscription:
             if resp.get("type") == "ka":
                 continue
 
-            yield resp
+            yield resp.get("payload", {})
 
 
     async def start(self):
