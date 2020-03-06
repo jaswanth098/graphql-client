@@ -26,12 +26,13 @@ class Subscription:
     async def listen(self):
         while self.is_running:
             resp = await self._conn.recv()
-            print("#########")
-            print(resp)
             try:
                 resp = json.loads(resp)
             except:
                 # TODO need to log the response
+                continue
+
+            if resp.get("type") == "ka":
                 continue
 
             yield resp
