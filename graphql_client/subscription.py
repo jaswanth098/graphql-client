@@ -27,7 +27,11 @@ class Subscription:
 
     async def listen(self):
         while self.is_running:
-            resp = await self._conn.recv()
+            try:
+                resp = await self._conn.recv()
+            except websockets.exception.ConnectionClosed:
+                continue
+
             try:
                 resp = json.loads(resp)
             except:
