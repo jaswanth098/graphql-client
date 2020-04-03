@@ -30,6 +30,7 @@ class Subscription:
             try:
                 resp = await self._conn.recv()
             except websockets.exception.ConnectionClosed:
+                self.is_running = False
                 continue
 
             try:
