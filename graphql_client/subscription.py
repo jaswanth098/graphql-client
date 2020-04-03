@@ -54,7 +54,6 @@ class Subscription:
         message = {"id": self._id, "type": "start", "payload": payload}
         await self._conn.send(json.dumps(message))
         res = await self._conn.recv()
-        print("after start %s" % res)
         self.is_running = True
 
     async def stop(self):
