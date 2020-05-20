@@ -19,7 +19,7 @@ class Subscription:
 
     async def _con_init(self):
         self._conn = await websockets.connect(
-            self.endpoint, subprotocols=[GRAPHQL_PROTOCOL]
+            self.endpoint, subprotocols=[GRAPHQL_PROTOCOL], extra_headers=self.headers
         )
         payload = {"type": "connection_init"}
         await self._conn.send(json.dumps(payload))
